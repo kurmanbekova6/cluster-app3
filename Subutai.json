@@ -1,0 +1,87 @@
+{
+  "name": "${environmentName}",
+  "description": "test",
+  "version": "1.0.0",
+  "author": "https://github.com/absidish",
+  "containers": [
+    {
+      "hostname": "db",
+      "template": "mysql@280dcda67a67d071970ff838d0331c33c0c04710",
+      "peer-criteria": "gr1",
+      "size": "${dbtype}",
+      "peer-layout": "d1"
+    },
+    {
+      "hostname": "web",
+      "template": "apache",
+      "peer-criteria": "gr1",
+      "size": "${webtype}",
+      "peer-layout": "d2"
+    }
+  ],
+  "peer-layouts": [
+    {
+      "name": "d1",
+      "peer-count": "1",
+      "container-per-peer": "3"
+    },
+     {
+      "name": "d2",
+      "peer-count": "1",
+      "container-per-peer": "1"
+    }
+  ],
+  "peer-criteria": [
+    {
+      "name": "gr1"
+    }
+  ],
+  "ansible-configuration": {
+    "source-url": "https://github.com/absidish/cluster-app3/archive/master.zip",
+    "ansible-playbook": "main.yml",
+    "extra-vars": [
+    ],
+    "groups": [
+      {
+        "name": "monitoring_servers",
+        "python-interpreter": "/usr/bin/python3",
+        "hostnames": [
+          "db"
+        ]
+      },
+      {
+        "name": "web_servers",
+        "python-interpreter": "/usr/bin/python3",
+        "hostnames": [
+          "web"
+        ]
+      }
+    ]
+  },
+  "user-variables": {
+    "environmentName": {
+      "description": "Enter the environment name",
+      "type": "string",
+      "default": "wp",
+      "validation": "[a-zA-Z0-9]+"
+    },
+    "peerCount": {
+      "description": "peer count",
+      "type": "int",
+      "default": "3",
+      "validation": "\\d+"
+    },
+    "dbtype": {
+      "description": "You can set TINY,SMALL,MEDIUM,LARGE,HUGE",
+      "type": "enum",
+      "default": "SMALL",
+      "validation": "TINY,SMALL,MEDIUM,LARGE,HUGE"
+    },
+    "webtype": {
+      "description": "You can set TINY,SMALL,MEDIUM,LARGE,HUGE",
+      "type": "enum",
+      "default": "SMALL",
+      "validation": "TINY,SMALL,MEDIUM,LARGE,HUGE"
+    }
+  }
+}
