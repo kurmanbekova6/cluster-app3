@@ -13,7 +13,7 @@
     },
     {
       "hostname": "web",
-      "template": "apache",
+      "template": "debian-stretch",
       "peer-criteria": "gr1",
       "size": "${webtype}",
       "peer-layout": "d2"
